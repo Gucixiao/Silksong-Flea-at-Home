@@ -25,6 +25,7 @@ namespace FleaAtHome
         private Vector3 initialPos;
 
         // Config entries
+        private ConfigEntry<string> videoFilePath;
         private ConfigEntry<string> targetSceneName;
         private ConfigEntry<Vector3> autoSpawnPosition;
 
@@ -42,58 +43,31 @@ namespace FleaAtHome
         private void Awake()
         {
             Logger.LogInfo("FleaAtHome plugin loaded!");
-            videoPath = Path.Combine(Paths.PluginPath, "FleaAtHome", "sleepingflea.webm");
 
-            // Config
+            // 视频路径配置
+            videoFilePath = Config.Bind(
+                "Media",
+                "VideoFile",
+                Path.Combine("FleaAtHome", "sleepingflea.webm"),
+                "Path to the video file for the flea (relative to BepInEx/plugins/FleaAtHome)"
+            );
+            videoPath = Path.Combine(Paths.PluginPath, videoFilePath.Value);
+
+            // 自动生成配置
             targetSceneName = Config.Bind("AutoSpawn", "SceneName", "Belltown_Room_Spare", "Target scene for automatic flea spawn.");
             autoSpawnPosition = Config.Bind("AutoSpawn", "Position", new Vector3(27.45f, 7.68f, 0.01f), "Position for automatic flea spawn.");
 
+            // 键位配置
             keySpawn = Config.Bind("Keys", "SpawnFlea", new KeyboardShortcut(KeyCode.F9), "Spawn flea");
             keyDestroy = Config.Bind("Keys", "DestroyFlea", new KeyboardShortcut(KeyCode.F10), "Destroy flea");
             keyResetPosition = Config.Bind("Keys", "ResetPosition", new KeyboardShortcut(KeyCode.End), "Reset flea position");
 
-            // 移动键，默认左Ctrl + 方向键
-            keyMoveUp = Config.Bind(
-                "Keys",
-                "MoveUp",
-                new KeyboardShortcut(KeyCode.UpArrow, KeyCode.LeftControl),
-                "Move flea up (default: Left Ctrl + UpArrow)"
-            );
-
-            keyMoveDown = Config.Bind(
-                "Keys",
-                "MoveDown",
-                new KeyboardShortcut(KeyCode.DownArrow, KeyCode.LeftControl),
-                "Move flea down (default: Left Ctrl + DownArrow)"
-            );
-
-            keyMoveLeft = Config.Bind(
-                "Keys",
-                "MoveLeft",
-                new KeyboardShortcut(KeyCode.LeftArrow, KeyCode.LeftControl),
-                "Move flea left (default: Left Ctrl + LeftArrow)"
-            );
-
-            keyMoveRight = Config.Bind(
-                "Keys",
-                "MoveRight",
-                new KeyboardShortcut(KeyCode.RightArrow, KeyCode.LeftControl),
-                "Move flea right (default: Left Ctrl + RightArrow)"
-            );
-
-            keyZUp = Config.Bind(
-                "Keys",
-                "MoveZUp",
-                new KeyboardShortcut(KeyCode.PageUp, KeyCode.LeftControl),
-                "Move flea forward (Z-) (default: Left Ctrl + PageUp)"
-            );
-
-            keyZDown = Config.Bind(
-                "Keys",
-                "MoveZDown",
-                new KeyboardShortcut(KeyCode.PageDown, KeyCode.LeftControl),
-                "Move flea backward (Z+) (default: Left Ctrl + PageDown)"
-            );
+            keyMoveUp = Config.Bind("Keys", "MoveUp", new KeyboardShortcut(KeyCode.UpArrow, KeyCode.LeftControl), "Move flea up (default: Left Ctrl + UpArrow)");
+            keyMoveDown = Config.Bind("Keys", "MoveDown", new KeyboardShortcut(KeyCode.DownArrow, KeyCode.LeftControl), "Move flea down (default: Left Ctrl + DownArrow)");
+            keyMoveLeft = Config.Bind("Keys", "MoveLeft", new KeyboardShortcut(KeyCode.LeftArrow, KeyCode.LeftControl), "Move flea left (default: Left Ctrl + LeftArrow)");
+            keyMoveRight = Config.Bind("Keys", "MoveRight", new KeyboardShortcut(KeyCode.RightArrow, KeyCode.LeftControl), "Move flea right (default: Left Ctrl + RightArrow)");
+            keyZUp = Config.Bind("Keys", "MoveZUp", new KeyboardShortcut(KeyCode.PageUp, KeyCode.LeftControl), "Move flea forward (Z-) (default: Left Ctrl + PageUp)");
+            keyZDown = Config.Bind("Keys", "MoveZDown", new KeyboardShortcut(KeyCode.PageDown, KeyCode.LeftControl), "Move flea backward (Z+) (default: Left Ctrl + PageDown)");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -190,16 +164,18 @@ namespace FleaAtHome
             videoPlayer.targetTexture = renderTexture;
             rawImage.texture = renderTexture;
 
+            // 使用 Config 指定路径
+            videoPath = Path.Combine(Paths.PluginPath, videoFilePath.Value);
             if (File.Exists(videoPath))
                 videoPlayer.url = videoPath;
             else
             {
-                Logger.LogError($"Video file not found at {videoPath}");
+                Logger.LogError($"Video file not found at {videoPath}. Please check your config.");
                 return;
             }
 
             videoPlayer.Play();
-            Logger.LogInfo($"Flea spawned at {initialPos} with size {rawImage.rectTransform.sizeDelta}");
+            Logger.LogInfo($"Flea spawned at {initialPos} with size {rawImage.rectTransform.sizeDelta} using video {videoPath}");
         }
 
         private void DestroyFlea()

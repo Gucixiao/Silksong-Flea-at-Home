@@ -10,10 +10,11 @@ Flea At Home 是一个用于空洞骑士-丝之歌的小模组，让你拥有一
 
 ## 使用自己的素材
 
-Flea At Home 现在不附带任何官方游戏素材。为了让跳蚤动画正常显示，您需要自行提供视频文件：
+Flea At Home 现在不附带任何官方游戏素材。我的素材是游戏录屏抠的，版权属于TC，所以我不会发布出来。为了让跳蚤动画正常显示，您需要自行准备视频文件：
 
 1. **准备素材**  
-   - 视频格式：`.webm` VP8 1920x1080px with Alpha通道，音频编码Vorbis.
+   - 视频格式：`.webm VP8 1920x1080px with Alpha通道`，音频编码Vorbis.
+   - 播放速度30fps.
 
 2. **放置路径**  
    - 将视频文件放入 `FleaAtHome` 文件夹
@@ -24,7 +25,7 @@ Flea At Home 现在不附带任何官方游戏素材。为了让跳蚤动画正�
    - 修改以下字段以匹配你的视频文件名和路径：
      ```ini
      [Media]
-     VideoFile = Media/MyFlea.webm
+     VideoFile = FleaAtHome\sleepingflea.webm
      ```
    - 保存后重启游戏  
 

@@ -1,4 +1,7 @@
 # Flea At Home v0.1.5
+Windows ONLY (Because I don't know how to code and the coding was done by ChatGPT)
+(PLEASE TEACH ME ANYTHING I really want to learn coding but the tutorials are so confusing)
+I SPEAK ENGLISH TOO
 
 **插件简介**  
 Flea At Home 是一个用于空洞骑士-丝之歌的小模组，让你拥有一只宠物跳蚤。

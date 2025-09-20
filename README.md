@@ -25,7 +25,6 @@ Flea At Home 现在不附带任何官方游戏素材。为了让跳蚤动画正�
      ```ini
      [Media]
      VideoFile = Media/MyFlea.webm
-     AudioFile = Media/MyFlea.ogg
      ```
    - 保存后重启游戏  
 
